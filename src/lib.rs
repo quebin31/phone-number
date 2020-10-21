@@ -20,7 +20,7 @@ fn extract_digits(string: &str) -> Vec<u8> {
         .collect()
 }
 
-fn is_valid_number(digits: &[u8]) -> bool {
+fn is_valid_nanp(digits: &[u8]) -> bool {
     if digits.len() != 10 {
         return false;
     }
@@ -40,22 +40,22 @@ pub fn number(user_number: &str) -> Option<String> {
     let mut digits = extract_digits(user_number);
     let no_digits = digits.len();
 
-    let valid = match no_digits {
-        10 => is_valid_number(&digits),
+    let valid_nanp = match no_digits {
+        10 => is_valid_nanp(&digits),
 
         11 => {
             if digits[0] != 1 {
                 false
             } else {
                 digits.remove(0);
-                is_valid_number(&digits)
+                is_valid_nanp(&digits)
             }
         }
 
         _ => false,
     };
 
-    if valid {
+    if valid_nanp {
         Some(digits.into_iter().map(|d| (d + 48) as char).collect())
     } else {
         None
