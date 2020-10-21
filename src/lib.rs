@@ -16,3 +16,13 @@ fn extract_digits(string: &str) -> Option<Vec<u8>> {
     Some(digits)
 }
 
+fn is_valid_number(digits: &[u8]) -> bool {
+    if digits.len() != 10 {
+        return false;
+    }
+
+    let area_code = &digits[0..3];
+    let exch_code = &digits[3..6];
+
+    !(area_code[0] < 2 || exch_code[0] < 2)
+}
