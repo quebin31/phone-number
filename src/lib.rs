@@ -26,3 +26,29 @@ fn is_valid_number(digits: &[u8]) -> bool {
 
     !(area_code[0] < 2 || exch_code[0] < 2)
 }
+
+pub fn number(user_number: &str) -> Option<String> {
+    let mut digits = extract_digits(user_number.trim())?;
+    let no_digits = digits.len();
+
+    let valid = match no_digits {
+        10 => is_valid_number(&digits),
+
+        11 => {
+            if digits[0] != 1 {
+                false
+            } else {
+                digits.remove(0);
+                is_valid_number(&digits)
+            }
+        }
+
+        _ => false,
+    };
+
+    if valid {
+        Some(digits.into_iter().map(|d| (d + 48) as char).collect())
+    } else {
+        None
+    }
+}
