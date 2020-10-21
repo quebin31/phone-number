@@ -20,44 +20,21 @@ fn extract_digits(string: &str) -> Vec<u8> {
         .collect()
 }
 
-fn is_valid_nanp(digits: &[u8]) -> bool {
-    if digits.len() != 10 {
-        return false;
-    }
-
-    let area_code = &digits[0..3];
-    let exch_code = &digits[3..6];
-
-    !(area_code[0] < 2 || exch_code[0] < 2)
-}
-
 pub fn number(user_number: &str) -> Option<String> {
     let user_number = user_number.trim();
+
     if !valid_format(user_number) {
-        return None;
-    }
-
-    let mut digits = extract_digits(user_number);
-    let no_digits = digits.len();
-
-    let valid_nanp = match no_digits {
-        10 => is_valid_nanp(&digits),
-
-        11 => {
-            if digits[0] != 1 {
-                false
-            } else {
-                digits.remove(0);
-                is_valid_nanp(&digits)
-            }
-        }
-
-        _ => false,
-    };
-
-    if valid_nanp {
-        Some(digits.into_iter().map(|d| (d + 48) as char).collect())
-    } else {
         None
+    } else {
+        let digits = extract_digits(user_number);
+        let digits_len = digits.len();
+
+        let cleaned = digits
+            .into_iter()
+            .skip(digits_len - 10)
+            .map(|d| (d + 48) as char)
+            .collect();
+
+        Some(cleaned)
     }
 }
