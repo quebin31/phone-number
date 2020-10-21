@@ -1,4 +1,13 @@
-fn extract_digits(string: &str) -> Option<Vec<u8>> {
+fn valid_format(string: &str) -> bool {
+    let regex = regex::Regex::new(
+        "^(\\+?1 *)?\\(?[2-9][0-9]{2}\\)?(-| *|\\.)[2-9][0-9]{2}(-| *|\\.)[0-9]{4}$",
+    )
+    .unwrap();
+
+    regex.is_match(string)
+}
+
+fn extract_digits(string: &str) -> Vec<u8> {
     let mut digits = Vec::new();
 
     for chr in string.chars() {
@@ -7,13 +16,11 @@ fn extract_digits(string: &str) -> Option<Vec<u8>> {
                 digits.push(digit.to_digit(10).map(|d| d as u8).expect("Shouldn't fail"))
             }
 
-            '(' | ')' | '-' | '.' | ' ' | '+' => continue,
-
-            _ => return None,
+            _ => continue,
         }
     }
 
-    Some(digits)
+    digits
 }
 
 fn is_valid_number(digits: &[u8]) -> bool {
@@ -28,7 +35,12 @@ fn is_valid_number(digits: &[u8]) -> bool {
 }
 
 pub fn number(user_number: &str) -> Option<String> {
-    let mut digits = extract_digits(user_number.trim())?;
+    let user_number = user_number.trim();
+    if !valid_format(user_number) {
+        return None;
+    }
+
+    let mut digits = extract_digits(user_number);
     let no_digits = digits.len();
 
     let valid = match no_digits {
