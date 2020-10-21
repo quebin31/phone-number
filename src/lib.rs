@@ -8,19 +8,16 @@ fn valid_format(string: &str) -> bool {
 }
 
 fn extract_digits(string: &str) -> Vec<u8> {
-    let mut digits = Vec::new();
-
-    for chr in string.chars() {
-        match chr {
-            digit if chr.is_ascii_digit() => {
-                digits.push(digit.to_digit(10).map(|d| d as u8).expect("Shouldn't fail"))
+    string
+        .chars()
+        .filter_map(|c| {
+            if c.is_ascii_digit() {
+                c.to_digit(10).map(|d| d as u8)
+            } else {
+                None
             }
-
-            _ => continue,
-        }
-    }
-
-    digits
+        })
+        .collect()
 }
 
 fn is_valid_number(digits: &[u8]) -> bool {
