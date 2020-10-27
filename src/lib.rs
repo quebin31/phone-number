@@ -13,17 +13,7 @@ pub fn number(user_number: &str) -> Option<String> {
     if !valid_format(user_number) {
         None
     } else {
-        let mut digits: String = user_number
-            .chars()
-            .filter_map(|c| {
-                if c.is_ascii_digit() {
-                    c.to_digit(10).map(|d| d as u8)
-                } else {
-                    None
-                }
-            })
-            .map(|d| (d + 48) as char)
-            .collect();
+        let mut digits: String = user_number.chars().filter(|c| c.is_ascii_digit()).collect();
 
         if digits.len() == 11 {
             digits.remove(0);
